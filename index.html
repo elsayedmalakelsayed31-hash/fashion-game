@@ -35,7 +35,6 @@
             flex-direction: column;
             align-items: center;
         }
-        /* مساحة العرض المرتبة والواضحة بالكامل */
         .stage {
             width: 160px;
             height: 250px;
@@ -56,10 +55,317 @@
         .stage:active {
             cursor: grabbing;
         }
-        
         .model-wrapper {
             position: relative;
             width: 100px;
             height: 220px;
-            display
-      
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+        .model {
+            position: relative;
+            width: 100px;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .head {
+            width: 38px;
+            height: 42px;
+            background: #ffeaa7;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            z-index: 5;
+            box-shadow: inset -2px -2px 0px rgba(0,0,0,0.05);
+        }
+        .hair {
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            height: 28px;
+            background: #2f3640;
+            border-radius: 50% 50% 10% 10%;
+            z-index: 6;
+        }
+        .body-shape {
+            width: 60px;
+            height: 80px;
+            background: #ff7675;
+            border-radius: 12px 12px 4px 4px;
+            position: relative;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+        }
+        .legs {
+            width: 30px;
+            height: 60px;
+            background: #ffeaa7;
+            border-radius: 0 0 8px 8px;
+            z-index: 1;
+        }
+        .outfit-layer {
+            position: absolute;
+            top: 38px;
+            z-index: 4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hint-text {
+            font-size: 0.7rem;
+            color: #fff;
+            background: rgba(0,0,0,0.35);
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin: 6px 0 3px 0;
+            color: #e84118;
+            font-size: 0.85rem;
+            align-self: flex-start;
+        }
+        .options-grid {
+            display: flex;
+            gap: 6px;
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 3px;
+        }
+        .option-btn {
+            background: #f1f2f6;
+            border: 2px solid #dfe4ea;
+            padding: 5px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .option-btn.active {
+            background: #ff7675;
+            color: #fff;
+            border-color: #d63031;
+        }
+        .judge-btn {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            padding: 9px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .judges-box {
+            margin-top: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 2px dashed #ced6e0;
+            display: none;
+        }
+        .judge-comment {
+            font-size: 0.75rem;
+            margin: 4px 0;
+            padding: 5px 7px;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .score-box {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #d63031;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>✨ مسابقة ملكة الموضة والأزياء ✨</h1>
+
+    <div class="game-container">
+        <div class="hint-text">👆 اسحب يمين أو يسار لتلتفت الشخصية</div>
+        <div class="stage" id="stage">
+            <div class="model-wrapper" id="modelWrapper">
+                <div class="model">
+                    <div class="head"><div class="hair"></div></div>
+                    <div class="body-shape" id="currentOutfitBg">
+                        <div class="outfit-layer" id="outfitDisplay">👕</div>
+                    </div>
+                    <div class="legs"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">اخترتي البلوزة / الفستان:</div>
+        <div class="options-grid" id="topOptions">
+            <button class="option-btn active" onclick="setTop('blazer', '🧥 بليزر عصري', '#0984e3')">🧥 بليزر شيك</button>
+            <button class="option-btn" onclick="setTop('dress', '👗 فستان سهرة', '#6c5ce7')">👗 فستان سهرة</button>
+            <button class="option-btn" onclick="setTop('hoodie', '👚 هودي كاجوال', '#fdcb6e')">👚 هودي كاجوال</button>
+            <button class="option-btn" onclick="setTop('top', '👕 توب أنيق', '#ff7675')">👕 توب أنيق</button>
+        </div>
+
+        <div class="section-title">اخترتي البنطلون / التنورة:</div>
+        <div class="options-grid" id="bottomOptions">
+            <button class="option-btn active" onclick="setBottom('jeans', '👖 جينز واسع', '#74b9ff')">👖 جينز واسع</button>
+            <button class="option-btn" onclick="setBottom('skirt', '👗 تنورة طويلة', '#a29bfe')">👗 تنورة طويلة</button>
+            <button class="option-btn" onclick="setBottom('pants', '👖 بنطلون رسمي', '#2d3436')">👖 بنطلون رسمي</button>
+        </div>
+
+        <div class="section-title">الإكسسوارات والحقائب:</div>
+        <div class="options-grid" id="accOptions">
+            <button class="option-btn active" onclick="setAcc('bag', '👜 حقيبة يد فاخرة')">👜 حقيبة يد</button>
+            <button class="option-btn" onclick="setAcc('glasses', '🕶️ نظارة شمسية')">🕶️ نظارة شمسية</button>
+            <button class="option-btn" onclick="setAcc('none', '✨ بدون إكسسوار')">✨ بدون</button>
+        </div>
+
+        <button class="judge-btn" onclick="evaluateOutfit()">🏆 اعرضي اللوك على لجنة الحكام!</button>
+
+        <div class="judges-box" id="judgesBox">
+            <div style="font-weight: bold; margin-bottom: 4px; color: #2d3436; font-size:0.8rem;">🎤 آراء لجنة التحكيم:</div>
+            <div class="judge-comment" id="judge1"></div>
+            <div class="judge-comment" id="judge2"></div>
+            <div class="judge-comment" id="judge3"></div>
+            <div class="score-box" id="finalScore"></div>
+        </div>
+    </div>
+
+    <script>
+        let selectedTop = { id: 'blazer', name: '🧥 بليزر عصري', color: '#0984e3' };
+        let selectedBottom = { id: 'jeans', name: '👖 جينز واسع' };
+        let selectedAcc = { id: 'bag', name: '👜 حقيبة يد فاخرة' };
+
+        function setTop(id, name, color) {
+            selectedTop = { id, name, color };
+            updateModel();
+            setActiveClass('topOptions', event.target);
+        }
+
+        function setBottom(id, name) {
+            selectedBottom = { id, name };
+            updateModel();
+            setActiveClass('bottomOptions', event.target);
+        }
+
+        function setAcc(id, name) {
+            selectedAcc = { id, name };
+            updateModel();
+            setActiveClass('accOptions', event.target);
+        }
+
+        function setActiveClass(containerId, clickedBtn) {
+            const container = document.getElementById(containerId);
+            Array.from(container.children).forEach(btn => btn.classList.remove('active'));
+            clickedBtn.classList.add('active');
+        }
+
+        function updateModel() {
+            const display = document.getElementById('outfitDisplay');
+            const bg = document.getElementById('currentOutfitBg');
+            bg.style.background = selectedTop.color;
+            display.innerHTML = `<div style="font-size:1.2rem">${selectedTop.name.split(' ')[0]}</div><div style="font-size:1rem; margin-top:3px;">${selectedBottom.name.split(' ')[0]}</div>`;
+        }
+
+        const stage = document.getElementById('stage');
+        const modelWrapper = document.getElementById('modelWrapper');
+        let isDragging = false;
+        let startX = 0;
+        let currentRotation = 0;
+
+        stage.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            let deltaX = e.clientX - startX;
+            currentRotation = deltaX * 0.8;
+            modelWrapper.style.transform = `rotateY(${currentRotation}deg)`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                modelWrapper.style.transform = `rotateY(0deg)`;
+            }
+        });
+
+        stage.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            let deltaX = e.touches[0].clientX - startX;
+            currentRotation = deltaX * 0.8;
+            modelWrapper.style.transform = `rotateY(${currentRotation}deg)`;
+        });
+
+        window.addEventListener('touchend', () => {
+            if (isDragging) {
+                isDragging = false;
+                modelWrapper.style.transform = `rotateY(0deg)`;
+            }
+        });
+
+        function evaluateOutfit() {
+            const box = document.getElementById('judgesBox');
+            box.style.display = 'block';
+
+            let score = 7;
+            let j1Text = "", j2Text = "", j3Text = "";
+
+            if (selectedTop.id === 'blazer' && selectedBottom.id === 'pants') {
+                score = 10;
+                j1Text = "مدام كارمن: 'يا الله! اللوك الرسمي الأنيق ده بيرفكت مع لفة العارضة الساحرة!' 🤩";
+                j2Text = "فهد (مصمم أزياء): 'تنسيق راقي وعصري جداً على الريد كاربت.' ✨";
+                j3Text = "سيمون (ناقد): '10 من 10 بدون تردد.' 🏆";
+            } else if (selectedTop.id === 'dress' && selectedBottom.id === 'skirt') {
+                score = 6;
+                j1Text = "مدام كارمن: 'اممم.. فستان على تنورة مع بعض؟ حسيت الدنيا زحمة شوية.' 🤔";
+                j2Text = "فهد: 'القطع منفصلة لوحدها حلوة، بس مش راكبين.' 📉";
+                j3Text = "سيمون: 'محتاجة تظبطي الاختيارات المرة الجاية.'";
+            } else if (selectedTop.id === 'hoodie' && selectedBottom.id === 'jeans') {
+                score = 9;
+                j1Text = "مدام كارمن: 'الله! الكاجوال ده مريح وكيوت أوي وهي بتلف بيه!' 🥰";
+                j2Text = "فهد: 'ستايل الشارع العصري مظبوط جداً.' 👍";
+                j3Text = "سيمون: 'تنسيق شبابي ممتاز.'";
+            } else {
+                score = 8;
+                j1Text = "مدام كارمن: 'اختيار جميل ومقبول، لكي مستقبل في الموضة!' 💃";
+                j2Text = "فهد: 'اللون والستايل متناسقين بشكل جيد.'";
+                j3Text = "سيمون: 'بداية موفقة ومظبوطة.'";
+            }
+
+            if (selectedAcc.id === 'bag' || selectedAcc.id === 'glasses') {
+                score = Math.min(10, score + 1);
+            }
+
+            document.getElementById('judge1').innerHTML = j1Text;
+            document.getElementById('judge2').innerHTML = j2Text;
+            document.getElementById('judge3').innerHTML = j3Text;
+            document.getElementById('finalScore').innerHTML = `⭐ التقييم النهائي: ${score} / 10 ⭐`;
+        }
+
+        updateModel();
+    </script>
+</body>
+</html>
